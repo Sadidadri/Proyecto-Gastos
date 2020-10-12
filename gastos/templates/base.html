@@ -32,16 +32,34 @@
                     <ul class="nav justify-content-between">
                         <li class="nav-item">
                             <a href="{% url 'index' %}" class="nav-link text-white">Inicio</a>
-                        </li>                        
+                        </li>
+                        {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a href="{% url 'index' %}" class="nav-link text-white">Categorías</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'index' %}" class="nav-link text-white">Perfiles</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'logout' %}" class="nav-link text-white">Logout</a>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a href="{% url 'login' %}" class="nav-link text-white">Login</a>
+                        </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
         </div>
     </nav>
-    {% block content %}
-    {% endblock %}
-    <footer>
-        <p>©Todos los derechos reservados 2020</p>
+    <div class="container" style="height: 85vh;">
+        {% block content %}
+        {% endblock %}
+    </div>
+    
+    <footer class="bg-dark">
+        <p class="text-white mb-0">©Todos los derechos reservados 2020</p>
     </footer>
 </body>
 </html>

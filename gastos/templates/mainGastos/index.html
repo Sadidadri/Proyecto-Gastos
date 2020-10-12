@@ -1,5 +1,35 @@
 {% extends '../base.html' %}
 
 {% block content %}
-<h3>Contenido del indice</h3>
+
+    <div class="row">
+        <div class="col">
+            <h3 class="text-center mb-3">Contenido del indice</h3>
+            {% if perfiles %}
+                {% for perfil in perfiles %}
+                    <div class="perfil">
+                        <h4 class="text-center">{{perfil.nombre}}</h4>
+                        <div class="text-center">
+                            <div class="p_caja d-inline-block text-left bg-primary p-2 border border-dark rounded">
+                                <p>Fecha de creación: {{perfil.fecha_de_creacion}}</p>
+                                <p>Último gasto realizado: <b>Gasolina 25€ 12-10-20</b></p>
+                                <p>Último mes: <b>1500€</b> </p>
+                                <p>Gasto total: <b>3700€</b></p>
+                                <p class="d-flex justify-content-around">
+                                    <a class="btn btn-secondary m-1" href='{% url "index" %}'>Nuevo Gasto</a>
+                                    <a class="btn btn-secondary m-1" href='{% url "index" %}'>Administrar Gastos</a>
+                                    <a class="btn btn-secondary m-1" href='{% url "index" %}'>Ver resumen</a>
+                                </p>
+                            </div>
+                        </div>
+                        
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No hay perfiles creados aún. Puedes crear uno <a href='{% url "index" %}'>aquí</a></p>
+            {% endif %}
+        </div>
+    </div>
+
+
 {% endblock %}
