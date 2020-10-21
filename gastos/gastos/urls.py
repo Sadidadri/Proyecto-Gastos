@@ -16,9 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from mainGastos.views import index
+#from crudbuilder import urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('',index,name="index")
+    path('',index,name="index"),
+    path('control/', include('mainGastos.urls')),
 ]

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% load render_table from django_tables2 %}
+{% load bootstrap3 %}
+{% load static %}
+
+{% block extraScripts %}
+    <script src='{% static "js/styleCRUD.js" %}'></script>
+    {% if perms.gastos.change_perfiles %}
+        <script src='{% static "js/customCRUD.js" %}'></script>
+    {% endif %}
+{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+
+
+            {% if filter %}
+            <form action="" method="get" class="form form-inline pt-2">
+                {% bootstrap_form filter.form layout='inline' %}
+                {% bootstrap_button 'filtrar' %}
+            </form>
+            {% endif %}
+
+            <h1>Gastos</h1>
+
+            {% render_table table %}
+
+            
+            <a style='margin-bottom:50px;' class='btn btn-primary' href='{% url "index" %}'>Nuevo</a>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
