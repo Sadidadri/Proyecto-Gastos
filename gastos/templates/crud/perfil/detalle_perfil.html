@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+
+            <h1>Detalles de Perfil</h1>
+            <h2>Nombre: {{object.nombre}}</h2>
+            <p>Fecha de creación: {{object.fecha_de_creacion}}</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

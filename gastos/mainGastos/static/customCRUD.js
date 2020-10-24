@@ -2,8 +2,8 @@ $(function() {
 
     //Add edit and delete titles to the table
     let $trhead = $(".table>thead>tr");
-    $trhead.append("<th>Edit</th>")
-    $trhead.append("<th>Delete</th>")
+    $trhead.append("<th>Editar</th>")
+    $trhead.append("<th>Eliminar</th>")
 
     let $trbody = $(".table>tbody>tr")
 
@@ -19,9 +19,9 @@ $(function() {
     $trbody.each(function(index){
         //Obtain id and add button edit
         let id = $(this).children().first().text()
-        $(this).append("<td><a href="+URL+"/edit/"+id+" class='btn btn-primary'>Edit</a></td>")
+        $(this).append("<td><a href="+URL+"/edita/"+id+" class='btn btn-primary'>Editar</a></td>")
         //add button delete
-        $(this).append("<td><a href="+URL+"/delete/"+id+" class='btn btn-danger'>Delete</a></td>")
+        $(this).append("<td><a href="+URL+"/elimina/"+id+" class='btn btn-danger'>Eliminar</a></td>")
 
     });
  

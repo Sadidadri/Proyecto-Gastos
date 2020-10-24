@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+
+            <h1>Detalles de Gasto</h1>
+            <h2>Nombre: {{object.nombre}}</h2>
+            <p>Categoria: {{object.fk_id_categoria}}</p>
+            <p>Perfil: {{object.fk_id_perfil}}</p>
+            <p>Descripcion: {{object.descripción}}</p>
+            <p>Precio: {{object.precio}}</p>
+            <p>Fecha: {{object.fecha}}</p>
+            
+        </div>
+    </div>
+</div>
+
+{% endblock %}

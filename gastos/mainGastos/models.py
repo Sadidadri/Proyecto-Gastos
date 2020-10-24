@@ -25,8 +25,8 @@ class Perfiles(models.Model):
         return self.nombre
     
 class Gastos(models.Model):
-    fk_id_categoria = models.ForeignKey(Categorias,on_delete=models.SET_NULL,null = True)
-    fk_id_perfil = models.ForeignKey(Perfiles,on_delete=models.SET_NULL, null = True)
+    fk_id_categoria = models.ForeignKey(Categorias,on_delete=models.CASCADE,null = True)
+    fk_id_perfil = models.ForeignKey(Perfiles,on_delete=models.CASCADE, null = True)
     descripción = models.CharField(max_length=200,null=True,blank=True)
     precio = models.DecimalField(max_digits=8, decimal_places=2)
     fecha = models.DateField()

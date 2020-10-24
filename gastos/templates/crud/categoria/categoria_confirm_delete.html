@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            {% if perms.call_billing_app.delete_categoria %}
+                <h1>Borrar categoría</h1>
+                <form method="post">{% csrf_token %}
+                    ¿Estás seguro de eliminar "{{ object }}" ?
+                    <input class='btn btn-danger' type="submit" value="Borrar" />
+                </form>
+            {% else %}
+                <p>Lo sentimos, no dispones de permisos para eliminar este item.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+

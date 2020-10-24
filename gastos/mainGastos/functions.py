@@ -16,10 +16,16 @@ def formatear_informacion_del_perfil(perfiles):
         gasto_mensual = g[0]
         total_gastos = g[1]
         p_nombre = perfil.nombre
-        ultimo_gasto = Gastos.objects.filter(fk_id_perfil=perfil).last()
-        cat = str(ultimo_gasto.fk_id_categoria)
-        precio = str(ultimo_gasto.precio)
-        fecha = str(ultimo_gasto.fecha)
+        try:
+            ultimo_gasto = Gastos.objects.filter(fk_id_perfil=perfil).last()
+            cat = str(ultimo_gasto.fk_id_categoria)
+            precio = str(ultimo_gasto.precio)
+            fecha = str(ultimo_gasto.fecha)
+        except:
+            #Ocurre cuando se ha creado nuevo perfil y no tiene gasto registrado
+            cat = ""
+            precio = ""
+            fecha = ""
         entrada_diccionario_perfil = {"fecha_de_creacion":str(perfil.fecha_de_creacion),"categoria":cat,"precio":precio,"fecha":fecha,"gasto_mensual":gasto_mensual,"total_gastos":total_gastos}
         diccionario_perfiles[p_nombre] = entrada_diccionario_perfil
     return diccionario_perfiles
