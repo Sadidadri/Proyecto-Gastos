@@ -6,7 +6,7 @@ from .tables import CategoriaTable,PerfilTable,GastoTable
 from django_filters.views import FilterView
 from django_tables2.views import SingleTableMixin
 from .filters import CategoriaFilter,PerfilFilter,GastoFilter
-from django.forms import ModelForm
+from django import forms
 
 from .functions import obtenerPerfiles,formatear_informacion_del_perfil
 # Create your views here.
@@ -20,16 +20,20 @@ def index(request):
     return render(request, 'mainGastos/index.html',{'perfiles':perfiles})
 
 #CRUD de categorías
-class CategoriaForm(ModelForm):
+class CategoriaForm(forms.ModelForm):
     class Meta:
         model = Categorias
         fields = ['nombre']
 
 def categoria_list(request):
     table = CategoriaTable(Categorias.objects.all().filter(usuario=request.user))
+    mensajeNoCategorias = False
 
+    if not Categorias.objects.filter(usuario=request.user):
+        mensajeNoCategorias = True    
     return render(request, "crud/categoria/listar_categoria.html", {
-        "table": table
+        "table": table,
+        "mensajeNoCategorias":mensajeNoCategorias
     })
 
 def categoria_view(request, pk, template_name='crud/categoria/detalle_categoria.html'):
@@ -62,7 +66,7 @@ def categoria_delete(request, pk, template_name='crud/categoria/categoria_confir
    
 
 #CRUD de perfiles
-class PerfilForm(ModelForm):
+class PerfilForm(forms.ModelForm):
     class Meta:
         model = Perfiles
         fields = ['nombre']
@@ -104,16 +108,27 @@ def perfil_delete(request, pk, template_name='crud/perfil/perfil_confirm_delete.
     return render(request, template_name, {'object':perfil})
 
 #CRUD de gastos
-class GastoForm(ModelForm):
+class GastoForm(forms.ModelForm):
+    
     class Meta:
         model = Gastos
-        fields = ['fk_id_perfil','fk_id_categoria','descripción','precio','fecha']
+        fields = ['descripción','precio','fecha']
+        widgets = {
+            'fecha': forms.DateInput(format=('%d/%m/%Y'), attrs={'class':'form-control', 'placeholder':'Elija una fecha', 'type':'date'}),
+        }
 
 def gasto_list(request,plk):
     table = GastoTable(Gastos.objects.all().filter(fk_id_perfil=plk))
-
+    nombre_perfil = Perfiles.objects.get(id=plk)
+    mensajeNoGastos = False
+    
+    if not Gastos.objects.filter(fk_id_perfil=nombre_perfil):
+        mensajeNoGastos = True 
     return render(request, "crud/gasto/listar_gasto.html", {
-        "table": table
+        "table": table,
+        "perfilN":plk,
+        "nombre_perfil":nombre_perfil,
+        "mensajeNoGastos":mensajeNoGastos
     })
 
 def gasto_view(request, pk,plk, template_name='crud/gasto/detalle_gasto.html'):
@@ -121,13 +136,18 @@ def gasto_view(request, pk,plk, template_name='crud/gasto/detalle_gasto.html'):
     return render(request, template_name, {'object':gasto})
 
 def gasto_create(request,plk, template_name='crud/gasto/gasto_create_form.html'):
+    perfil = Perfiles.objects.get(id=plk)
+    user = perfil.usuario
+    categorias = Categorias.objects.filter(usuario=user)
     form = GastoForm(request.POST or None)
     if form.is_valid():
         f = form.save(commit=False)
+        f.fk_id_categoria = Categorias.objects.get(id=request.POST['categoria'])
+        f.fk_id_perfil = perfil
         f.usuario = request.user
         f.save()
-        return redirect('listar_gasto')
-    return render(request, template_name, {'form':form})
+        return redirect('listar_gasto', plk)
+    return render(request, template_name, {'categorias':categorias,'form':form})
 
 def gasto_update(request, pk,plk, template_name='crud/gasto/gasto_form.html'):
     gasto= get_object_or_404(Gastos, pk=pk)

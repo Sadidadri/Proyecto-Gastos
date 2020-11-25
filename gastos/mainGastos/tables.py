@@ -22,11 +22,12 @@ class PerfilTable(tables.Table):
         return format_html("{}", value)
 
 class GastoTable(tables.Table):
+    fk_id_categoria = tables.Column(verbose_name= 'Categoría' )
     fecha = tables.Column()
     class Meta:
        model = Gastos
        template_name = "django_tables2/bootstrap.html"
-       fields = ("id","fk_id_categoria","fk_id_perfil","descripción","precio","fecha")
+       fields = ("id","fk_id_categoria","descripción","precio","fecha")
 
     def render_fecha(self, value, record):
         value = value.strftime('%d/%m/%Y')

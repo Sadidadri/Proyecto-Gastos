@@ -24,12 +24,14 @@
             </form>
             {% endif %}
         -->
-            <h1>Categorías</h1>
+            <h1 class="text-center">Categorías</h1>
 
-            {% render_table table %}
-
-            
-            <a style='margin-bottom:50px;' class='btn btn-primary' href='{% url "categoria_new" %}'>Nueva</a>
+            {% if mensajeNoCategorias %}
+                <p>Aún no se han añadido categorías. Puedes añadir una nueva <a href="{% url 'categoria_new' %}">aquí</a></p>
+            {% else %}
+                {% render_table table %}
+                <a style='margin-bottom:50px;' class='btn btn-primary' href='{% url "categoria_new" %}'>Nueva</a>
+            {% endif %}
 
         </div>
     </div>

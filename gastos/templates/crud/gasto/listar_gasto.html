@@ -24,12 +24,16 @@
             </form>
             {% endif %}
             -->
-            <h1>Gastos</h1>
+            <h1 class="text-center">Gastos - {{ nombre_perfil }} </h1>
 
-            {% render_table table %}
-
+            {% if mensajeNoGastos %}
+                <p>Aún no se han añadido gastos. Puedes añadir uno nuevo <a href="{% url 'gasto_new' perfilN %}">aquí</a></p>
+            {% else %}
+                {% render_table table %}
+                <a style='margin-bottom:50px;' class='btn btn-primary' href='{% url "gasto_new" perfilN %}'>Nuevo</a>
+            {% endif %}
             
-            <a style='margin-bottom:50px;' class='btn btn-primary' href='{% url "gasto_new" %}'>Nuevo</a>
+            
 
         </div>
     </div>

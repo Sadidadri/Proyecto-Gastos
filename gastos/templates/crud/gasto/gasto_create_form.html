@@ -1,4 +1,16 @@
 {% extends 'base.html' %}
+{% block extraScripts %}
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script>
+        $(function() {
+            $('.datepicker').datepicker({
+                format: 'mm/dd/yyyy'
+            });
+
+     });
+        
+    </script>
+{% endblock %}
 {% block content %}
 
 
@@ -8,6 +20,15 @@
 
             <h1>Crear gasto</h1>
             <form method="post">{% csrf_token %}
+                <p>
+                    <label for="categoria">Categoría:</label>
+                    <select id="categoria" name="categoria">
+                    {% for categoria in categorias %}
+                        <option value="{{categoria.id}}">{{categoria.nombre}}</option>
+                    {% endfor %}
+                    </select>
+                </p>
+                
                 {{ form.as_p }}
                 <input class="btn btn-primary" type="submit" value="Enviar" />
             </form>
