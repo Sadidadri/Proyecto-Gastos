@@ -7,6 +7,7 @@ from django_filters.views import FilterView
 from django_tables2.views import SingleTableMixin
 from .filters import CategoriaFilter,PerfilFilter,GastoFilter
 from django import forms
+from .forms import GastoForm,CategoriaForm,PerfilForm
 
 from .functions import obtenerPerfiles,formatear_informacion_del_perfil
 # Create your views here.
@@ -20,11 +21,6 @@ def index(request):
     return render(request, 'mainGastos/index.html',{'perfiles':perfiles})
 
 #CRUD de categorías
-class CategoriaForm(forms.ModelForm):
-    class Meta:
-        model = Categorias
-        fields = ['nombre']
-
 def categoria_list(request):
     table = CategoriaTable(Categorias.objects.all().filter(usuario=request.user))
     mensajeNoCategorias = False
@@ -66,10 +62,6 @@ def categoria_delete(request, pk, template_name='crud/categoria/categoria_confir
    
 
 #CRUD de perfiles
-class PerfilForm(forms.ModelForm):
-    class Meta:
-        model = Perfiles
-        fields = ['nombre']
 
 def perfil_list(request):
     table = PerfilTable(Perfiles.objects.all().filter(usuario=request.user))
@@ -108,14 +100,6 @@ def perfil_delete(request, pk, template_name='crud/perfil/perfil_confirm_delete.
     return render(request, template_name, {'object':perfil})
 
 #CRUD de gastos
-class GastoForm(forms.ModelForm):
-    
-    class Meta:
-        model = Gastos
-        fields = ['descripción','precio','fecha']
-        widgets = {
-            'fecha': forms.DateInput(format=('%d/%m/%Y'), attrs={'class':'form-control', 'placeholder':'Elija una fecha', 'type':'date'}),
-        }
 
 def gasto_list(request,plk):
     table = GastoTable(Gastos.objects.all().filter(fk_id_perfil=plk))
@@ -154,12 +138,12 @@ def gasto_update(request, pk,plk, template_name='crud/gasto/gasto_form.html'):
     form = GastoForm(request.POST or None, instance=gasto)
     if form.is_valid():
         form.save()
-        return redirect('listar_gasto')
+        return redirect('listar_gasto', plk)
     return render(request, template_name, {'form':form})
 
 def gasto_delete(request, pk,plk, template_name='crud/gasto/gasto_confirm_delete.html'):
     gasto= get_object_or_404(Gastos, pk=pk)    
     if request.method=='POST':
         gasto.delete()
-        return redirect('listar_gasto')
+        return redirect('listar_gasto', plk)
     return render(request, template_name, {'object':gasto})

@@ -7,19 +7,19 @@
             {% if user.is_authenticated %}
                 {% if perfiles %}
                     {% for nombrePerfil, contenido in perfiles.items %}
-                        <div class="perfil">
+                        <div class="perfil my-2  py-1">
                             <h4 class="text-center">{{nombrePerfil}}</h4>
                             <div class="text-center">
                                 <div class="p_caja d-inline-block text-left bg-primary p-2 border border-dark rounded">
                                     {% if not contenido.precio %}
                                     <p>Aún no se han añadido gastos</p>
                                     {% else %}
-                                    <p>Último gasto añadido: <b>{{contenido.categoria}} {{contenido.precio}}€ {{contenido.fecha}}</b></p>
+                                    <p>Último gasto añadido: <b>{{contenido.categoria}} {{contenido.precio}}€ {{ contenido.fecha}}</b></p>
                                     {%endif%}
                                     <p>Mes actual: <b>{{contenido.gasto_mensual}}€</b> </p>
                                     <p>Gasto total: <b>{{contenido.total_gastos}}€</b></p>
                                     <p class="d-flex justify-content-around">
-                                        <a class="btn btn-secondary m-1" href='{% url "index" %}'>Nuevo Gasto</a>
+                                        <a class="btn btn-secondary m-1" href='/control/l/{{contenido.id}}/gastos/nuevo'>Nuevo Gasto</a>
                                         <a class="btn btn-secondary m-1" href='/control/l/{{contenido.id}}/gastos/'>Administrar Gastos</a>
                                         <a class="btn btn-secondary m-1" href='{% url "index" %}'>Ver resumen</a>
                                     </p>
