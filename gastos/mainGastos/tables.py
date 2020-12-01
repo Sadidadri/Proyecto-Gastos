@@ -8,6 +8,7 @@ class CategoriaTable(tables.Table):
        model = Categorias
        template_name = "django_tables2/bootstrap.html"
        fields = ("id","nombre",)
+       attrs = {"class": "table table-striped"}
 
 class PerfilTable(tables.Table):
     fecha_de_creacion = tables.Column()
@@ -16,6 +17,8 @@ class PerfilTable(tables.Table):
        model = Perfiles
        template_name = "django_tables2/bootstrap.html"
        fields = ("id","nombre","fecha_de_creacion",)
+       attrs = {"class": "table table-striped"}
+       
 
     def render_fecha_de_creacion(self, value, record):
         value = value.strftime('%d/%m/%Y')
@@ -28,6 +31,7 @@ class GastoTable(tables.Table):
        model = Gastos
        template_name = "django_tables2/bootstrap.html"
        fields = ("id","fk_id_categoria","descripción","precio","fecha")
+       attrs = {"class": "table table-striped"}
 
     def render_fecha(self, value, record):
         value = value.strftime('%d/%m/%Y')

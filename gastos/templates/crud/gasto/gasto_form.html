@@ -5,12 +5,15 @@
 <div class="container">
     <div class="row">
         <div class="col">
-
+            {% if perms.mainGastos.edit_gasto and isOwner %}
             <h1>Editar gasto</h1>
             <form method="post">{% csrf_token %}
                 {{ form.as_p }}
                 <input class="btn btn-primary" type="submit" value="Enviar" />
             </form>
+            {% else %}
+                <p>Lo sentimos, no dispones de permisos para editar este item.</p>
+            {% endif %}
 
         </div>
     </div>

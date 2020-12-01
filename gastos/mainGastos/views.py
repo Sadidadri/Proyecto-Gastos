@@ -24,6 +24,7 @@ def index(request):
 def categoria_list(request):
     table = CategoriaTable(Categorias.objects.all().filter(usuario=request.user))
     mensajeNoCategorias = False
+    notTheOwner = False
 
     if not Categorias.objects.filter(usuario=request.user):
         mensajeNoCategorias = True    
@@ -48,17 +49,25 @@ def categoria_create(request, template_name='crud/categoria/categoria_create_for
 def categoria_update(request, pk, template_name='crud/categoria/categoria_form.html'):
     categoria= get_object_or_404(Categorias, pk=pk)
     form = CategoriaForm(request.POST or None, instance=categoria)
+    isOwner = False
+    userOfCategory = Categorias.objects.get(id=pk).usuario
+    if (request.user == userOfCategory):
+        isOwner = True
     if form.is_valid():
         form.save()
         return redirect('listar_categoria')
-    return render(request, template_name, {'form':form})
+    return render(request, template_name, {'form':form,'isOwner':isOwner})
 
 def categoria_delete(request, pk, template_name='crud/categoria/categoria_confirm_delete.html'):
     categoria= get_object_or_404(Categorias, pk=pk)    
+    isOwner = False
+    userOfCategory = Categorias.objects.get(id=pk).usuario
+    if (request.user == userOfCategory):
+        isOwner = True
     if request.method=='POST':
         categoria.delete()
         return redirect('listar_categoria')
-    return render(request, template_name, {'object':categoria})
+    return render(request, template_name, {'object':categoria,'isOwner':isOwner})
    
 
 #CRUD de perfiles
@@ -87,17 +96,25 @@ def perfil_create(request, template_name='crud/perfil/perfil_create_form.html'):
 def perfil_update(request, pk, template_name='crud/perfil/perfil_form.html'):
     perfil= get_object_or_404(Perfiles, pk=pk)
     form = PerfilForm(request.POST or None, instance=perfil)
+    isOwner = False
+    userOfProfile = Perfiles.objects.get(id=pk).usuario
+    if (request.user == userOfProfile):
+        isOwner = True
     if form.is_valid():
         form.save()
         return redirect('listar_perfil')
-    return render(request, template_name, {'form':form})
+    return render(request, template_name, {'form':form,'isOwner':isOwner})
 
 def perfil_delete(request, pk, template_name='crud/perfil/perfil_confirm_delete.html'):
-    perfil= get_object_or_404(Perfiles, pk=pk)    
+    perfil= get_object_or_404(Perfiles, pk=pk) 
+    isOwner = False
+    userOfProfile = Perfiles.objects.get(id=pk).usuario
+    if (request.user == userOfProfile):
+        isOwner = True   
     if request.method=='POST':
         perfil.delete()
         return redirect('listar_perfil')
-    return render(request, template_name, {'object':perfil})
+    return render(request, template_name, {'object':perfil,'isOwner':isOwner})
 
 #CRUD de gastos
 
@@ -124,6 +141,9 @@ def gasto_create(request,plk, template_name='crud/gasto/gasto_create_form.html')
     user = perfil.usuario
     categorias = Categorias.objects.filter(usuario=user)
     form = GastoForm(request.POST or None)
+    isOwner = False
+    if (request.user == user):
+        isOwner = True
     if form.is_valid():
         f = form.save(commit=False)
         f.fk_id_categoria = Categorias.objects.get(id=request.POST['categoria'])
@@ -131,19 +151,27 @@ def gasto_create(request,plk, template_name='crud/gasto/gasto_create_form.html')
         f.usuario = request.user
         f.save()
         return redirect('listar_gasto', plk)
-    return render(request, template_name, {'categorias':categorias,'form':form})
+    return render(request, template_name, {'categorias':categorias,'form':form,'isOwner':isOwner})
 
 def gasto_update(request, pk,plk, template_name='crud/gasto/gasto_form.html'):
     gasto= get_object_or_404(Gastos, pk=pk)
     form = GastoForm(request.POST or None, instance=gasto)
+    isOwner = False
+    userOfGasto = Gastos.objects.get(id=pk).fk_id_categoria.usuario
+    if (request.user == userOfGasto):
+        isOwner = True
     if form.is_valid():
         form.save()
         return redirect('listar_gasto', plk)
-    return render(request, template_name, {'form':form})
+    return render(request, template_name, {'form':form,'isOwner':isOwner})
 
 def gasto_delete(request, pk,plk, template_name='crud/gasto/gasto_confirm_delete.html'):
-    gasto= get_object_or_404(Gastos, pk=pk)    
+    gasto= get_object_or_404(Gastos, pk=pk)  
+    isOwner = False
+    userOfGasto = Gastos.objects.get(id=pk).fk_id_categoria.usuario
+    if (request.user == userOfGasto):
+        isOwner = True   
     if request.method=='POST':
         gasto.delete()
         return redirect('listar_gasto', plk)
-    return render(request, template_name, {'object':gasto})
+    return render(request, template_name, {'object':gasto,'isOwner':isOwner})
