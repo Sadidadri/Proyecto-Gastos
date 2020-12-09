@@ -15,12 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from mainGastos.views import index
+from mainGastos.views import index,signup,account_activation_sent,activate
 #from crudbuilder import urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
+    path(r'^account_activation_sent/$', account_activation_sent, name='account_activation_sent'),
+    path(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',activate, name='activate'),
     path('',index,name="index"),
+    path('registro/',signup,name="registro"),
     path('control/', include('mainGastos.urls')),
 ]

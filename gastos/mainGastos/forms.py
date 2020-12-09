@@ -1,4 +1,5 @@
-from .models import Categorias,Perfiles,Gastos
+from .models import User,Categorias,Perfiles,Gastos
+from django.contrib.auth.forms import UserCreationForm
 from django import forms
 
 class GastoForm(forms.ModelForm):
@@ -27,3 +28,10 @@ class CategoriaForm(forms.ModelForm):
         widgets = {
             'nombre': forms.TextInput(attrs={'class':'form-control','placeholder':'Nombre para la categoría. e.g Compra en Amazon'}),
         }
+
+class SignUpForm(UserCreationForm):
+    email = forms.EmailField(max_length=254, help_text='Requerido. Introduzca una cuenta de correo válida.')
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password1', 'password2', )
