@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.sites.shortcuts import get_current_site
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User,Permission
 from django.utils.encoding import force_bytes,force_text
 from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 from django.template.loader import render_to_string
@@ -145,7 +145,10 @@ def gasto_view(request, pk,plk, template_name='crud/gasto/detalle_gasto.html'):
 def gasto_create(request,plk, template_name='crud/gasto/gasto_create_form.html'):
     perfil = Perfiles.objects.get(id=plk)
     user = perfil.usuario
+    existenCategorias = False
     categorias = Categorias.objects.filter(usuario=user)
+    if(categorias):
+        existenCategorias = True
     form = GastoForm(request.POST or None)
     isOwner = False
     if (request.user == user):
@@ -157,7 +160,7 @@ def gasto_create(request,plk, template_name='crud/gasto/gasto_create_form.html')
         f.usuario = request.user
         f.save()
         return redirect('listar_gasto', plk)
-    return render(request, template_name, {'categorias':categorias,'form':form,'isOwner':isOwner})
+    return render(request, template_name, {'existenCategorias':existenCategorias,'categorias':categorias,'form':form,'isOwner':isOwner})
 
 def gasto_update(request, pk,plk, template_name='crud/gasto/gasto_form.html'):
     gasto= get_object_or_404(Gastos, pk=pk)
@@ -218,6 +221,22 @@ def activate(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.profile.email_confirmed = True
+        
+        #Añadir permisos de edicion y borrado de perfiles,categorias y gastos
+        permisoEditaPerfiles = Permission.objects.get(name='Can change perfiles')
+        permisoBorraPerfiles = Permission.objects.get(name='Can delete perfiles')
+        permisoEditaCategorias = Permission.objects.get(name='Can change categorias')
+        permisoBorraCategorias = Permission.objects.get(name='Can delete categorias')
+        permisoEditaGastos = Permission.objects.get(name='Can change gastos')
+        permisoBorraGastos = Permission.objects.get(name='Can delete gastos')
+        
+        user.user_permissions.add(permisoEditaPerfiles)
+        user.user_permissions.add(permisoBorraPerfiles)
+        user.user_permissions.add(permisoEditaCategorias)
+        user.user_permissions.add(permisoBorraCategorias)
+        user.user_permissions.add(permisoEditaGastos)
+        user.user_permissions.add(permisoBorraGastos)
+
         user.save()
         login(request, user)
         return redirect('index')

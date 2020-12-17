@@ -15,13 +15,14 @@
     <div class="container">
         <div class="row justify-content-center ">
             <div class="col-sm-12 col-md-6">
-                <h2 class="text-center">Login</h2>
+                <h2 class="text-center">Iniciar Sesión</h2>
                 <form method="post">
                     {% csrf_token %}
                     <div class="form-group py-2">
                         {{ form.as_p }}
                         <button type="submit" class="btn btn-primary mt-2">Login</button>
                     </div>
+                    <p>Si no dispone de una cuenta, puede registrarse haciendo click <a href="{% url 'registro' %}">en este enlace</a></p>
                 </form>
             </div>
         </div>

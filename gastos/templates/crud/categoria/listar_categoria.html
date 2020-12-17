@@ -6,7 +6,7 @@
 
 {% block extraScripts %}
     <script src='{% static "styleCRUD.js" %}'></script>
-    {% if perms.gastos.change_categorias %}
+    {% if perms.mainGastos.change_categorias %}
         <script src='{% static "customCRUD.js" %}'></script>
     {% endif %}
 {% endblock %}

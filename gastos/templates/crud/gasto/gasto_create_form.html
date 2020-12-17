@@ -7,25 +7,28 @@
 <div class="container">
     <div class="row d-flex justify-content-center">
         <div class="col-sm-12 col-md-6">
-            {% if perms.mainGastos.create_gasto and isOwner %}
-            <h1 class="text-center">Crear gasto</h1>
-            <form method="post">{% csrf_token %}
-                <p>
-                    <label for="categoria">Categoría:</label>
-                    <select id="categoria" name="categoria" class="form-control">
-                    {% for categoria in categorias %}
-                        <option value="{{categoria.id}}">{{categoria.nombre}}</option>
-                    {% endfor %}
-                    </select>
-                </p>
-                
-                {{ form.as_p }}
-                <input class="btn btn-primary mt-2" type="submit" value="Enviar" />
-            </form>
+            {% if existenCategorias %}
+                {% if isOwner %}
+                <h1 class="text-center">Crear gasto</h1>
+                <form method="post">{% csrf_token %}
+                    <p>
+                        <label for="categoria">Categoría:</label>
+                        <select id="categoria" name="categoria" class="form-control">
+                        {% for categoria in categorias %}
+                            <option value="{{categoria.id}}">{{categoria.nombre}}</option>
+                        {% endfor %}
+                        </select>
+                    </p>
+                    
+                    {{ form.as_p }}
+                    <input class="btn btn-primary mt-2" type="submit" value="Enviar" />
+                </form>
+                {% else %}
+                    <p>Lo sentimos, no dispones de permisos para crear gastos en este perfil.</p>
+                {% endif %}
             {% else %}
-                <p>Lo sentimos, no dispones de permisos para crear gastos en este perfil.</p>
+                <p class="mt-5">Para crear un gasto, antes debes crear almenos una <a href="{% url 'categoria_new' %}">categoría</a> para poder clasificarlo.</p>
             {% endif %}
-
         </div>
     </div>
 </div>

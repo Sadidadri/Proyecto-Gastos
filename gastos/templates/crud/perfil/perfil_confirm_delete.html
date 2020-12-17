@@ -3,7 +3,7 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            {% if perms.mainGastos.delete_perfil and isOwner %}
+            {% if perms.mainGastos.delete_perfiles and isOwner %}
                 <h1>Borrar perfil</h1>
                 <form method="post">{% csrf_token %}
                     ¿Estás seguro de eliminar "{{ object }}" ?

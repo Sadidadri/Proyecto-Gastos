@@ -5,7 +5,7 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            {% if perms.mainGastos.edit_perfil and isOwner %}
+            {% if perms.mainGastos.change_perfiles and isOwner %}
             <h1>Editar perfil</h1>
             <form method="post">{% csrf_token %}
                 {{ form.as_p }}
