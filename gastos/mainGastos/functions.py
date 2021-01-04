@@ -1,5 +1,10 @@
 from .models import Perfiles,Gastos
+from gastos.settings import EMAIL_HOST_USER
 from datetime import datetime
+from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
+from django.core.mail import send_mail
 
 def obtenerPerfiles(user):
     if user.id == None:
@@ -52,3 +57,24 @@ def obtenerMes():
 
 def obtenerAgno():
     return datetime.today().strftime("%Y")
+
+
+def envia_email_confirmacion(user,domain,uid,token):
+    subject = 'Confirmación de nuevo usuario. Aplicación Gastos'
+    
+    #send_mail(subject, 'hola', EMAIL_HOST_USER, [user.email], fail_silently = False)
+    template = get_template('registration/account_activation_email.html')
+    
+    content = template.render({
+        'user': user,
+        'domain': domain,
+        'uid': uid,
+        'token': token,
+    })
+    message = EmailMultiAlternatives(subject,'',EMAIL_HOST_USER,[user.email])
+    
+    message.attach_alternative(content, 'text/html')
+    message.content_subtype = "html"
+    message.send()
+
+    print("hola")

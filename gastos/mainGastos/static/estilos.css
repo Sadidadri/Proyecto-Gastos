@@ -3,7 +3,23 @@
     text-decoration: none;
 }
 
+#encabezado{
+    max-width:18vw;
+}
+
 #navegacion>li>a:hover{
     transform: scale(1.1);
     color:  #007bff !important;
+}
+
+@media (max-width: 500px) {
+    #encabezado{
+        max-width:50vw;
+    }
+}
+
+@media (min-width: 501px) and (max-width: 1200px) {
+    #encabezado{
+        max-width:40vw;
+    }
 }

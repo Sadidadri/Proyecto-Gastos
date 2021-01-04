@@ -14,17 +14,22 @@ from .filters import CategoriaFilter,PerfilFilter,GastoFilter
 from .models import Categorias,Perfiles,Gastos
 from .forms import GastoForm,CategoriaForm,PerfilForm,SignUpForm
 from .tokens import account_activation_token
+from django.core.mail import send_mail
 
-from .functions import obtenerPerfiles,formatear_informacion_del_perfil
+from .functions import obtenerPerfiles,formatear_informacion_del_perfil,envia_email_confirmacion
 # Create your views here.
 
 def index(request):
+    #envia_email_confirmacion(request.user,'1','2','3')
 
     p = obtenerPerfiles(request.user)
     perfiles = None
     if p != None:
         perfiles = formatear_informacion_del_perfil(p)
     return render(request, 'mainGastos/index.html',{'perfiles':perfiles})
+
+def cuenta_activada(request):
+    return render(request, 'registration/account_activation_email_success.html')
 
 #CRUD de categorías
 def categoria_list(request):
@@ -195,14 +200,14 @@ def signup(request):
             user.is_active = False
             user.save()
             current_site = get_current_site(request)
-            subject = 'Activa tu cuenta'
-            message = render_to_string('registration/account_activation_email.html', {
-                'user': user,
-                'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'token': account_activation_token.make_token(user),
-            })
-            user.email_user(subject, message)
+            #subject = 'Activa tu cuenta'
+            #message = render_to_string('registration/account_activation_email.html', {
+            #    'user': user,
+            #    'domain': current_site.domain,
+            #    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+            #    'token': account_activation_token.make_token(user),
+            #})
+            envia_email_confirmacion(user,current_site,urlsafe_base64_encode(force_bytes(user.pk)),account_activation_token.make_token(user))
             return redirect('account_activation_sent')
     else:
         form = SignUpForm()
@@ -239,6 +244,6 @@ def activate(request, uidb64, token):
 
         user.save()
         login(request, user)
-        return redirect('index')
+        return redirect('c_activada')
     else:
         return render(request, 'registration/account_activation_invalid.html')
