@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from mainGastos.views import index,signup,account_activation_sent,activate,cuenta_activada
+from mainGastos.views import index,signup,account_activation_sent,activate,cuenta_activada,resumen
 #from crudbuilder import urls
 
 urlpatterns = [
@@ -27,4 +27,5 @@ urlpatterns = [
     path('registro/',signup,name="registro"),
     path('registro/exito',cuenta_activada,name='c_activada'),
     path('control/', include('mainGastos.urls')),
+    path('resumen/<int:plk>',resumen,name="resumen")
 ]

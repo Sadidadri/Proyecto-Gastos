@@ -5,6 +5,7 @@ from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.core.mail import send_mail
+from django.db.models import Max,Min
 
 def obtenerPerfiles(user):
     if user.id == None:
@@ -77,4 +78,15 @@ def envia_email_confirmacion(user,domain,uid,token):
     message.content_subtype = "html"
     message.send()
 
-    print("hola")
+def obtener_gasto_mas_caro(perfil):
+    gasto = Gastos.objects.filter(fk_id_perfil=perfil)
+    g = gasto.aggregate(Max('precio'))
+    max_gasto = Gastos.objects.filter(precio=g['precio__max'] , fk_id_perfil=perfil)[0]
+    return str(max_gasto)
+
+def obtener_gasto_mas_barato(perfil):
+    gasto = Gastos.objects.filter(fk_id_perfil=perfil)
+    g = gasto.aggregate(Min('precio'))
+    pr = g['precio__min']
+    min_gasto = Gastos.objects.filter(precio=pr , fk_id_perfil=perfil)[0]
+    return min_gasto

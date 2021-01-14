@@ -9,7 +9,7 @@
             <h1>Editar categoría</h1>
             <form method="post">{% csrf_token %}
                 {{ form.as_p }}
-                <input class="btn btn-primary" type="submit" value="Enviar" />
+                <input class="btn btn-primary" type="submit" value="Confirmar" />
             </form>
             {% else %}
                 <p>Lo sentimos, no dispones de permisos para modificar este item.</p>

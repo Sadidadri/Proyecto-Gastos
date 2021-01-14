@@ -45,4 +45,6 @@ class Gastos(models.Model):
     fecha = models.DateField()
 
     def __str__(self):
+        if( self.descripción == None):
+            return "Gasto sin descripción ("+str(self.precio)+"€)"
         return self.descripción+" ("+str(self.precio)+"€)"

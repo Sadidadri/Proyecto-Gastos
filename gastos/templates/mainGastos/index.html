@@ -6,6 +6,7 @@
         <div class="col">
             {% if user.is_authenticated %}
                 {% if perfiles %}
+                    <h3 class="text-center">Tus perfiles:</h4>
                     {% for nombrePerfil, contenido in perfiles.items %}
                         <div class="perfil my-2  py-1">
                             <h4 class="text-center">{{nombrePerfil}}</h4>
@@ -21,20 +22,30 @@
                                     <p class="d-flex justify-content-around">
                                         <a class="btn btn-secondary m-1" href='/control/l/{{contenido.id}}/gastos/nuevo'>Nuevo Gasto</a>
                                         <a class="btn btn-secondary m-1" href='/control/l/{{contenido.id}}/gastos/'>Administrar Gastos</a>
-                                        <a class="btn btn-secondary m-1" href='{% url "index" %}'>Ver resumen</a>
+                                        <a class="btn btn-secondary m-1" href='/resumen/{{contenido.id}}'>Ver resumen</a>
                                     </p>
                                 </div>
                             </div>
                             
                         </div>
                     {% endfor %}
+                    <p class="py-2"></p>
                 {% else %}
                     <p>No hay perfiles creados aún. Puedes crear uno <a href='{% url "perfil_new" %}'>aquí</a></p>
                 {% endif %}
             {% else %}
                 <h2>Bienvenido a la aplicación Gastos</h2>
-                <p>Aún no has iniciado sesión, puedes iniciar sesión dando click <a href='{% url "login" %}'>aquí</a></p>
+                <p class="mt-3" style="color:gray;font-size:0.85rem;">Aún no has iniciado sesión, puedes iniciar sesión haciendo click <a href='{% url "login" %}'>aquí</a></p>
             {% endif %}
+            <p style="max-width: 800px;">Con esta aplicación podrás realizar un seguimiento de los gastos registrados, ayudandote a poder realizar un estudio de cuanto dinero se ha desembolsado cada mes.</p>
+            <p style="max-width: 800px;">La aplicación cuenta con los siguientes apartados:</p>
+            <ul style="max-width: 800px;">
+                <li><span><b>Perfiles</b>: Cada perfil indica bajo dónde se ha realizado el gasto, pudiendo separar por ejemplo los gastos de casa de los gastos del trabajo.</span></li>
+                <li><b>Categorías</b>: Si hay un gasto que suele repetirse de forma periódica, como por ejemplo la compra semanal en el supermercado, puedes crear una categoría para englobar esos gastos bajo ella.</li>
+                <li><b>Gastos</b>: Es la parte fundamental de la aplicación, para registrar un gasto es necesario tener creado almenos un <b>perfil</b> antes. Para ello necesitarás como mínimo aportar su importe.</li>
+            </ul>
+            <p>Aquí una videoguía de la aplicación:</p>
+            <img src="https://adrianfuentesflores.es/wp-content/uploads/elementor/thumbs/V%C3%ADdeo-a%C3%BAn-no-disponible-o9r2moiivmegzs4zhz7dgnx50kvockkdptb1nbwu14.png" alt="videotutorial"> <p style="color: gray;">(En construcción...)</p>
         </div>
     </div>
 

@@ -30,6 +30,12 @@ $(function() {
     $('.btn-default').removeClass('.btn-default').addClass('btn-primary');
     $('.pagination li.active').addClass('btn-primary');
 
+    //Elimina el id de cada elemento (no nos interesa mostrarlos)
+    $('table>thead>tr>th').first().remove()
     
+    let $filas = $('table>tbody>tr')
+    for (let i = 0; i < $filas.length; i++) {
+        $filas[i].removeChild($filas[i].getElementsByTagName('td')[0]);
+    }
 });
 

@@ -16,12 +16,9 @@ from .forms import GastoForm,CategoriaForm,PerfilForm,SignUpForm
 from .tokens import account_activation_token
 from django.core.mail import send_mail
 
-from .functions import obtenerPerfiles,formatear_informacion_del_perfil,envia_email_confirmacion
-# Create your views here.
+from .functions import obtenerPerfiles,formatear_informacion_del_perfil,envia_email_confirmacion,obtener_gasto_mas_caro,obtener_gasto_mas_barato
 
 def index(request):
-    #envia_email_confirmacion(request.user,'1','2','3')
-
     p = obtenerPerfiles(request.user)
     perfiles = None
     if p != None:
@@ -85,6 +82,14 @@ def categoria_delete(request, pk, template_name='crud/categoria/categoria_confir
 
 def perfil_list(request):
     table = PerfilTable(Perfiles.objects.all().filter(usuario=request.user))
+    mensajeNoPerfiles = False
+    
+    if not Perfiles.objects.filter(usuario=request.user):
+        mensajeNoPerfiles = True    
+    return render(request, "crud/perfil/listar_perfil.html", {
+        "table": table,
+        "mensajeNoPerfiles":mensajeNoPerfiles
+    })
 
     return render(request, "crud/perfil/listar_perfil.html", {
         "table": table
@@ -200,13 +205,6 @@ def signup(request):
             user.is_active = False
             user.save()
             current_site = get_current_site(request)
-            #subject = 'Activa tu cuenta'
-            #message = render_to_string('registration/account_activation_email.html', {
-            #    'user': user,
-            #    'domain': current_site.domain,
-            #    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-            #    'token': account_activation_token.make_token(user),
-            #})
             envia_email_confirmacion(user,current_site,urlsafe_base64_encode(force_bytes(user.pk)),account_activation_token.make_token(user))
             return redirect('account_activation_sent')
     else:
@@ -247,3 +245,28 @@ def activate(request, uidb64, token):
         return redirect('c_activada')
     else:
         return render(request, 'registration/account_activation_invalid.html')
+
+#Resumen de un perfil
+def resumen(request,plk):
+    perfil = Perfiles.objects.get(id=plk)
+
+    isOwner = False
+    userOfProfile = perfil.usuario
+    if (request.user == userOfProfile):
+        isOwner = True
+
+    informacion = {}
+    informacion['nombre_perfil'] = perfil.nombre
+    informacion['mas_caro'] = obtener_gasto_mas_caro(perfil)
+    informacion['mas_barato'] = obtener_gasto_mas_barato(perfil)
+    return render(request, 'mainGastos/resumen.html',{'isOwner':isOwner,'informacion': informacion})
+    
+    
+    #if not Gastos.objects.filter(fk_id_perfil=nombre_perfil):
+    #    mensajeNoGastos = True 
+    #return render(request, "crud/gasto/listar_gasto.html", {
+    #    "table": table,
+    #    "perfilN":plk,
+    #    "nombre_perfil":nombre_perfil,
+    #    "mensajeNoGastos":mensajeNoGastos
+    #})

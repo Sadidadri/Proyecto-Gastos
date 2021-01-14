@@ -26,10 +26,12 @@
             -->
             <h1 class="text-center">Perfiles</h1>
 
-            {% render_table table %}
-
-            
-            <a style='margin-bottom:50px;' class='btn btn-primary' href='{% url "perfil_new" %}'>Nuevo</a>
+            {% if mensajeNoPerfiles %}
+                <p>Aún no se han añadido perfiles. Puedes añadir uno nuevo <a href="{% url 'perfil_new' %}">aquí</a></p>
+            {% else %}
+                {% render_table table %}
+                <a style='margin-bottom:50px;' class='btn btn-primary' href='{% url "perfil_new" %}'>Nuevo</a>
+            {% endif %}
 
         </div>
     </div>
