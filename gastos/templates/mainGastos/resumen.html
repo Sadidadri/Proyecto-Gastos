@@ -6,17 +6,24 @@
         <div class="col">
             {% if user.is_authenticated %}
                 {% if isOwner %}
-                    <h2 class="text-center">Resumen de {{informacion.nombre_perfil}}</h3>
-                        
-                    <h4 class="text-center">Gasto más caro:</h5>
-                    <p class="text-center"><b>{{informacion.mas_caro}}</b></p>
+                    {% if informacion %}
+                        <h2 class="text-center">Resumen de {{informacion.nombre_perfil}}</h3>
 
-                    <h4 class="text-center">Gasto más barato:</h4>
-                    <p class="text-center"><b>{{informacion.mas_barato}}</b></p>
+                        <h4 class="text-center">Suma total de gastos:</h5>
+                        <p class="text-center"><b>{{informacion.gasto_total}}€</b></p>
 
+                        <h4 class="text-center">Gasto más caro:</h5>
+                        <p class="text-center"><b>{{informacion.mas_caro}}</b></p>
+
+                        <h4 class="text-center">Gasto más barato:</h4>
+                        <p class="text-center"><b>{{informacion.mas_barato}}</b></p>
                     {% else %}
+                        <p class="text-center">Todavía no se han añadido gastos bajo este perfil.</p>
+                        <p class="text-center">Puedes añadir uno nuevo haciendo click <a href="/control/l/{{plk}}/gastos/nuevo">aquí</a></p>
+                    {% endif %}
+                {% else %}
                     <p>Lo sentimos, pero la web que buscas no se ha encontrado.</p>
-                    {%endif%}
+                {%endif%}
             {% else %}
                 <h2>Bienvenido a la aplicación Gastos</h2>
                 <p class="mt-3" style="color:gray;font-size:0.85rem;">Aún no has iniciado sesión, puedes iniciar sesión haciendo click <a href='{% url "login" %}'>aquí</a></p>

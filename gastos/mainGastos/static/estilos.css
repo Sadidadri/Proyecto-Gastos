@@ -1,10 +1,26 @@
+@keyframes pop {
+    0% {
+      transform: scale(0.3);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    70% {
+      transform: scale(0.9);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
 #titulo{
     color:black;
-    text-decoration: none;
+    text-decoration: none; 
 }
 
 #encabezado{
     max-width:18vw;
+    animation: pop 0.6s;
 }
 
 #navegacion>li>a:hover{

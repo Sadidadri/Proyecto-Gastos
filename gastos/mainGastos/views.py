@@ -16,7 +16,7 @@ from .forms import GastoForm,CategoriaForm,PerfilForm,SignUpForm
 from .tokens import account_activation_token
 from django.core.mail import send_mail
 
-from .functions import obtenerPerfiles,formatear_informacion_del_perfil,envia_email_confirmacion,obtener_gasto_mas_caro,obtener_gasto_mas_barato
+from .functions import obtenerPerfiles,formatear_informacion_del_perfil,envia_email_confirmacion,obtener_gasto_mas_caro,obtener_gasto_mas_barato,obtener_gasto_total_y_mensual
 
 def index(request):
     p = obtenerPerfiles(request.user)
@@ -255,12 +255,15 @@ def resumen(request,plk):
     if (request.user == userOfProfile):
         isOwner = True
 
-    informacion = {}
-    informacion['nombre_perfil'] = perfil.nombre
-    informacion['mas_caro'] = obtener_gasto_mas_caro(perfil)
-    informacion['mas_barato'] = obtener_gasto_mas_barato(perfil)
-    return render(request, 'mainGastos/resumen.html',{'isOwner':isOwner,'informacion': informacion})
-    
+    try:
+        informacion = {}
+        informacion['nombre_perfil'] = perfil.nombre
+        informacion['gasto_total'] = obtener_gasto_total_y_mensual(perfil)[1]
+        informacion['mas_caro'] = obtener_gasto_mas_caro(perfil)
+        informacion['mas_barato'] = obtener_gasto_mas_barato(perfil)
+        return render(request, 'mainGastos/resumen.html',{'isOwner':isOwner,'informacion': informacion})
+    except:
+        return render(request, 'mainGastos/resumen.html',{'isOwner':isOwner,'informacion': None,'plk':plk})
     
     #if not Gastos.objects.filter(fk_id_perfil=nombre_perfil):
     #    mensajeNoGastos = True 
