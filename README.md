@@ -9,9 +9,13 @@
 
 Página web realizada con el framework Django. Consta de un sistema de registro de usuarios que pueden administrar sus gastos y realizar un estudio mediante esta aplicación.
 
-## About RollPizza
+## About Gastos
 
 Website made with Django's framework. It consists of a registration system for users who can manage their expenses and do a study about them through this application.
+
+## Try it!
+
+http://sadidadri.pythonanywhere.com/
 
 ## Demo
 
